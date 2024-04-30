@@ -1,0 +1,35 @@
+services:
+  django:
+    build: .
+    restart: always
+    volumes:
+      - ./django_transaction_app:/app/django_transaction_app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: django_transaction_app
+      MYSQL_USER: django
+      MYSQL_PASSWORD: django
+      DJANGO_DEBUG: false
+      # PYTHONPATH: /app/django_transaction_app
+  db:
+    image: mysql:8
+    restart: "no"
+    ports:
+      - "3306:3306"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:15672"]
+        interval: 5s
+        timeout: 5s
+        retries: 15
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: django
+      MYSQL_PASSWORD: django
+      MYSQL_DATABASE: django_transaction_app
+      MYSQL_ROOT_HOST: "%"
+    volumes:
+      - ./dbdata:/var/lib/mysql/

@@ -1,9 +1,13 @@
+from decimal import Decimal
+
 from django.db import models
 
 
 class Wallet(models.Model):
     label = models.CharField("Label", max_length=255)
-    balance = models.DecimalField("Balance", max_digits=20, decimal_places=0)
+    balance = models.DecimalField(
+        "Balance", max_digits=20, decimal_places=0, default=Decimal("0")
+    )
 
     def __str__(self):
         return self.label
