@@ -15,9 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import include, path
+from django.urls import include, path, re_path
+from django.views.generic.base import RedirectView
 from transaction.urls import router as transaction_router
 
 urlpatterns = [
     path("api/v1/", include(transaction_router.urls)),
+    re_path(r"^$", RedirectView.as_view(url="api/v1/", permanent=False), name="index"),
 ]
