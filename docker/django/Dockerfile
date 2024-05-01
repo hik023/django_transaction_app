@@ -7,17 +7,19 @@ COPY ./django_transaction_app /app/django_transaction_app
 
 RUN apt-get install gcc default-libmysqlclient-dev -y
 
-COPY ./requirements.txt /app/requirements.txt
+COPY ./docker/django/requirements.txt /app/requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 
 # CMD ["python", "django_transaction_app/manage.py", "runserver"]
 
-COPY ./entrypoint.sh /app/entrypoint.sh
+COPY ./docker/django/entrypoint.sh /app/entrypoint.sh
 
 RUN chmod 777 /app/entrypoint.sh
 
 WORKDIR /app/django_transaction_app
+
+RUN ./manage.py collectstatic --noinput --clear
 
 ENTRYPOINT ["/app/entrypoint.sh"]
 

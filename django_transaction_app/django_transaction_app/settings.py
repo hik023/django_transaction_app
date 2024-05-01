@@ -15,18 +15,18 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+config = os.environ
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-n5+d#qkq0r#5n6g63s77*(s=i)4$w%*_t9q&yw7)ha_u61l4s#"
+SECRET_KEY = config.get("DJANGO_SECRET_KEY", "")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ["DJANGO_DEBUG"]
+DEBUG = config.get("DJANGO_DEBUG", False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -46,12 +46,13 @@ PROJECT_APPS = [
 THIRD_PARTY_APPS = [
     "rest_framework",
     "rest_framework_json_api",
+    "django_probes",
 ]
 
 INSTALLED_APPS = [
     *DJANGO_APPS,
-    *PROJECT_APPS,
     *THIRD_PARTY_APPS,
+    *PROJECT_APPS,
 ]
 
 MIDDLEWARE = [
@@ -91,11 +92,11 @@ WSGI_APPLICATION = "django_transaction_app.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": os.environ["MYSQL_DATABASE"],
-        "USER": os.environ["MYSQL_USER"],
-        "PASSWORD": os.environ["MYSQL_PASSWORD"],
-        "HOST": os.environ["MYSQL_HOST"],
-        "PORT": "3306",
+        "NAME": config.get("MYSQL_DATABASE", "django_transaction_app"),
+        "USER": config.get("MYSQL_USER", "django"),
+        "PASSWORD": config.get("MYSQL_PASSWORD", "django"),
+        "HOST": config.get("MYSQL_DATABASE_HOST", "127.0.0.1"),
+        "PORT": config.get("MYSQL_DATABASE_PORT", "3306"),
     }
 }
 
@@ -135,6 +136,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -164,5 +166,5 @@ REST_FRAMEWORK = {
     "TEST_REQUEST_RENDERER_CLASSES": (
         "rest_framework_json_api.renderers.JSONRenderer",
     ),
-    "TEST_REQUEST_DEFAULT_FORMAT": "vnd.api+json",
+    "TEST_REQUEST_DEFAULT_FORMAT": ("vnd.api+json",),
 }

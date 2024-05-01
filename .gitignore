@@ -1,3 +1,7 @@
 .venv
 .python-version
-**/__pycache__/
+__pycache__
+staticfiles
+.vscode
+.envrc
+dbdata

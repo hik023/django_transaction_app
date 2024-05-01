@@ -16,7 +16,9 @@ class Wallet(models.Model):
 class Transaction(models.Model):
     amount = models.DecimalField("Amount", max_digits=18, decimal_places=0)
     txid = models.CharField("txid", max_length=255, unique=True)
-    wallet_id = models.ForeignKey(Wallet, on_delete=models.CASCADE)
+    wallet_id = models.ForeignKey(
+        Wallet, on_delete=models.CASCADE, verbose_name="Wallet"
+    )
 
     def __str__(self):
         return self.txid
