@@ -1,5 +1,4 @@
 from rest_framework.test import APITestCase
-
 from transaction.models import Wallet
 
 

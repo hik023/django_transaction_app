@@ -16,7 +16,6 @@ Including another URLconf
 """
 
 from django.urls import include, path
-
 from transaction.urls import router as transaction_router
 
 urlpatterns = [
